@@ -245,10 +245,15 @@ POST /resumes
 }
 ```
 
-#### Get All Resumes
+#### Get User's Resumes
 ```
 GET /resumes
 ```
+
+This endpoint returns all resumes belonging to the authenticated user.
+
+**Authorization Required**
+Requires a valid JWT token in the Authorization header.
 
 **Response (200 OK)**
 ```json
@@ -268,6 +273,14 @@ GET /resumes
       "updatedAt": "2023-09-14T11:25:35Z"
     }
   ]
+}
+```
+
+**Error Response (401 Unauthorized)**
+```json
+{
+  "success": false,
+  "message": "Authentication required"
 }
 ```
 

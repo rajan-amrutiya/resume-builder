@@ -250,6 +250,46 @@ export class Resume {
     this.props.updatedAt = new Date();
   }
 
+  public addProject(project: Omit<{ name: string; description?: string; url?: string; technologies?: string[] }, 'id'>): number {
+    const id = this.props.projects && this.props.projects.length > 0 
+      ? Math.max(...this.props.projects.map(p => p.id)) + 1 
+      : 1;
+    
+    if (!this.props.projects) {
+      this.props.projects = [];
+    }
+    
+    this.props.projects.push({ ...project, id });
+    this.props.updatedAt = new Date();
+    return id;
+  }
+
+  public updateProject(projectId: number, project: Partial<Omit<{ name: string; description?: string; url?: string; technologies?: string[] }, 'id'>>): void {
+    if (!this.props.projects) {
+      throw new Error(`No projects found`);
+    }
+    
+    const index = this.props.projects.findIndex(p => p.id === projectId);
+    if (index === -1) {
+      throw new Error(`Project with ID ${projectId} not found`);
+    }
+    
+    this.props.projects[index] = {
+      ...this.props.projects[index],
+      ...project
+    };
+    this.props.updatedAt = new Date();
+  }
+
+  public removeProject(projectId: number): void {
+    if (!this.props.projects) {
+      return;
+    }
+    
+    this.props.projects = this.props.projects.filter(p => p.id !== projectId);
+    this.props.updatedAt = new Date();
+  }
+
   // Get all properties as a plain object
   public getProps(): ResumeProps {
     return { ...this.props };

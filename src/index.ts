@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import { initializeDatabase } from './config/database';
 import { AuthController } from './modules/users/presentation/controllers/AuthController';
 import { AuthMiddleware } from './shared/middleware/auth.middleware';
+import resumeRoutes from './modules/resumes/presentation/routes/resumeRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -36,6 +37,9 @@ app.get('/api/profile', AuthMiddleware.authenticate, (req: Request, res: Respons
     data: req.user
   });
 });
+
+// Resume routes
+app.use('/api/resumes', resumeRoutes);
 
 // Start server
 const startServer = async (): Promise<void> => {

@@ -93,6 +93,9 @@ The API follows RESTful principles and provides the following endpoints:
 - `npm start` - Run the built project
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Fix ESLint issues
+- `npm run seed:user` - Seed a test user (ID: 4)
+- `npm run seed:resumes` - Seed sample resumes for user ID 4
+- `npm run seed:all` - Run all seed scripts
 
 ### Troubleshooting
 
