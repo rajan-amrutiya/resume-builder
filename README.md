@@ -16,15 +16,21 @@ The project follows a clean architecture pattern with the following layers:
 ### Prerequisites
 
 - Node.js (v14+)
-- MySQL (v8+)
+- MySQL (v8+) - Remote database already configured
 
 ### Installation
 
 1. Clone the repository
+   ```
+   git clone git@github.com:rajan-amrutiya/resume-builder.git (using SSH)
+   cd resume-builder
+   ```
+
 2. Install dependencies
    ```
    npm install
    ```
+
 3. Create a `.env` file based on the following template:
    ```
    # Server Configuration
@@ -32,10 +38,10 @@ The project follows a clean architecture pattern with the following layers:
    NODE_ENV=development
 
    # Database Configuration
-   DB_HOST=localhost
+   DB_HOST=SG-Resume-Builder-12570-mysql-master.servers.mongodirector.com
    DB_PORT=3306
-   DB_USERNAME=root
-   DB_PASSWORD=your_password
+   DB_USERNAME=sgroot
+   DB_PASSWORD=44Tt&3rVTX0qIpzg
    DB_DATABASE=resume_builder
 
    # JWT Configuration
@@ -43,20 +49,22 @@ The project follows a clean architecture pattern with the following layers:
    JWT_EXPIRES_IN=1d
    ```
 
-4. Create a MySQL database
-   ```
-   CREATE DATABASE resume_builder;
-   ```
-
-5. Run database migrations
-   ```
-   npm run migration:run
-   ```
-
-6. Start the development server
+4. Start the development server
    ```
    npm run dev
    ```
+
+## Database Information
+
+The application uses a remote MySQL database that is already configured and populated with initial data. The connection details are:
+
+- Host: `SG-Resume-Builder-12570-mysql-master.servers.mongodirector.com`
+- Port: `3306`
+- Username: `sgroot`
+- Password: `44Tt&3rVTX0qIpzg`
+- Database: `resume_builder`
+
+The connection uses SSL with `rejectUnauthorized: false` for secure communication.
 
 ## API Documentation
 
@@ -83,10 +91,42 @@ The API follows RESTful principles and provides the following endpoints:
 - `npm run dev` - Start the development server
 - `npm run build` - Build the project
 - `npm start` - Run the built project
-- `npm run migration:generate` - Generate a new migration
-- `npm run migration:run` - Run migrations
 - `npm run lint` - Run ESLint
 - `npm run lint:fix` - Fix ESLint issues
+
+### Troubleshooting
+
+If you encounter database connection issues:
+
+1. Verify that your `.env` file has the correct database connection settings
+2. Check that your network allows connections to the remote database
+3. Ensure SSL is properly configured in the database connection
+
+## Deployment
+
+To deploy the application to production:
+
+1. Build the project
+   ```
+   npm run build
+   ```
+
+2. Set the environment variables for production
+   ```
+   NODE_ENV=production
+   PORT=3000
+   DB_HOST=SG-Resume-Builder-12570-mysql-master.servers.mongodirector.com
+   DB_PORT=3306
+   DB_USERNAME=sgroot
+   DB_PASSWORD=44Tt&3rVTX0qIpzg
+   DB_DATABASE=resume_builder
+   JWT_SECRET=your_production_jwt_secret
+   ```
+
+3. Run the application
+   ```
+   npm start
+   ```
 
 ## License
 
