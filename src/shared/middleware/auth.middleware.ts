@@ -1,17 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
 import { JwtUtil } from '../utils/jwt.util';
 
-// Extend Express Request type
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        userId: number;
-        email: string;
-        role: string;
-        [key: string]: any;
-      };
-    }
+// Extend Express Request type using declaration merging with ES2015 module syntax
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
+      userId: number;
+      email: string;
+      role: string;
+      [key: string]: any;
+    };
   }
 }
 

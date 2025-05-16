@@ -76,10 +76,10 @@ export class TypeORMResumeRepository implements IResumeRepository {
       }
       resumeEntity.userId = resume.getUserId();
       resumeEntity.title = resume.getTitle();
-      resumeEntity.summary = resume.getSummary();
+      resumeEntity.summary = resume.getSummary() || '';
       resumeEntity.status = resume.getStatus();
-      resumeEntity.contactInformation = resume.getContactInformation();
-      resumeEntity.templateId = resume.getTemplateId();
+      resumeEntity.contactInformation = resume.getContactInformation() || { email: '' };
+      resumeEntity.templateId = resume.getTemplateId() || 0;
 
       await transactionalEntityManager.save(resumeEntity);
 
@@ -96,9 +96,9 @@ export class TypeORMResumeRepository implements IResumeRepository {
           entity.institution = edu.institution;
           entity.degree = edu.degree;
           entity.fieldOfStudy = edu.fieldOfStudy;
-          entity.startDate = edu.startDate;
-          entity.endDate = edu.endDate;
-          entity.description = edu.description;
+          entity.startDate = edu.startDate || new Date();
+          entity.endDate = edu.endDate || new Date();
+          entity.description = edu.description || '';
           return entity;
         });
         await transactionalEntityManager.save(educationEntities);
@@ -116,11 +116,11 @@ export class TypeORMResumeRepository implements IResumeRepository {
           entity.resumeId = resumeEntity.id; // Use the saved entity ID which may be auto-generated
           entity.company = exp.company;
           entity.position = exp.position;
-          entity.location = exp.location;
-          entity.startDate = exp.startDate;
-          entity.endDate = exp.endDate;
-          entity.description = exp.description;
-          entity.achievements = exp.achievements;
+          entity.location = exp.location || '';
+          entity.startDate = exp.startDate || new Date();
+          entity.endDate = exp.endDate || new Date();
+          entity.description = exp.description || '';
+          entity.achievements = exp.achievements || [];
           return entity;
         });
         await transactionalEntityManager.save(experienceEntities);
@@ -137,8 +137,8 @@ export class TypeORMResumeRepository implements IResumeRepository {
           }
           entity.resumeId = resumeEntity.id; // Use the saved entity ID which may be auto-generated
           entity.name = skill.name;
-          entity.level = skill.level;
-          entity.category = skill.category;
+          entity.level = skill.level || 0;
+          entity.category = skill.category || '';
           return entity;
         });
         await transactionalEntityManager.save(skillEntities);
@@ -151,12 +151,12 @@ export class TypeORMResumeRepository implements IResumeRepository {
           const projectEntity = new ProjectEntity();
           // Only set ID if it's provided (for existing records)
           if (project.id) {
-            projectEntity.id = project.id;
+            projectEntity.id = project.id.toString();
           }
-          projectEntity.resumeId = resumeEntity.id; // Use the saved entity ID which may be auto-generated
+          projectEntity.resumeId = resumeEntity.id.toString(); // Use the saved entity ID which may be auto-generated
           projectEntity.name = project.name;
-          projectEntity.description = project.description;
-          projectEntity.url = project.url;
+          projectEntity.description = project.description || '';
+          projectEntity.url = project.url || '';
 
           await transactionalEntityManager.save(projectEntity);
 
@@ -181,9 +181,9 @@ export class TypeORMResumeRepository implements IResumeRepository {
           const entity = new LanguageEntity();
           // Only set ID if it's provided (for existing records)
           if (lang.id) {
-            entity.id = lang.id;
+            entity.id = lang.id.toString();
           }
-          entity.resumeId = resumeEntity.id; // Use the saved entity ID which may be auto-generated
+          entity.resumeId = resumeEntity.id.toString(); // Use the saved entity ID which may be auto-generated
           entity.name = lang.name;
           entity.proficiency = lang.proficiency;
           return entity;
@@ -207,10 +207,10 @@ export class TypeORMResumeRepository implements IResumeRepository {
     await this.dataSource.transaction(async transactionalEntityManager => {
       // Update resume
       existingResume.title = resume.getTitle();
-      existingResume.summary = resume.getSummary();
+      existingResume.summary = resume.getSummary() || '';
       existingResume.status = resume.getStatus();
-      existingResume.contactInformation = resume.getContactInformation();
-      existingResume.templateId = resume.getTemplateId();
+      existingResume.contactInformation = resume.getContactInformation() || { email: '' };
+      existingResume.templateId = resume.getTemplateId() || 0;
 
       await transactionalEntityManager.save(existingResume);
 
@@ -222,7 +222,7 @@ export class TypeORMResumeRepository implements IResumeRepository {
 
       // Get all projects IDs to delete technologies
       const projectEntities = await transactionalEntityManager.find(ProjectEntity, {
-        where: { resumeId: resume.getId() },
+        where: { resumeId: resume.getId().toString() },
         select: ['id']
       });
       const projectIds = projectEntities.map(p => p.id);
@@ -250,9 +250,9 @@ export class TypeORMResumeRepository implements IResumeRepository {
           entity.institution = edu.institution;
           entity.degree = edu.degree;
           entity.fieldOfStudy = edu.fieldOfStudy;
-          entity.startDate = edu.startDate;
-          entity.endDate = edu.endDate;
-          entity.description = edu.description;
+          entity.startDate = edu.startDate || new Date();
+          entity.endDate = edu.endDate || new Date();
+          entity.description = edu.description || '';
           return entity;
         });
         await transactionalEntityManager.save(educationEntities);
@@ -270,11 +270,11 @@ export class TypeORMResumeRepository implements IResumeRepository {
           entity.resumeId = resume.getId();
           entity.company = exp.company;
           entity.position = exp.position;
-          entity.location = exp.location;
-          entity.startDate = exp.startDate;
-          entity.endDate = exp.endDate;
-          entity.description = exp.description;
-          entity.achievements = exp.achievements;
+          entity.location = exp.location || '';
+          entity.startDate = exp.startDate || new Date();
+          entity.endDate = exp.endDate || new Date();
+          entity.description = exp.description || '';
+          entity.achievements = exp.achievements || [];
           return entity;
         });
         await transactionalEntityManager.save(experienceEntities);
@@ -291,8 +291,8 @@ export class TypeORMResumeRepository implements IResumeRepository {
           }
           entity.resumeId = resume.getId();
           entity.name = skill.name;
-          entity.level = skill.level;
-          entity.category = skill.category;
+          entity.level = skill.level || 0;
+          entity.category = skill.category || '';
           return entity;
         });
         await transactionalEntityManager.save(skillEntities);
@@ -305,12 +305,12 @@ export class TypeORMResumeRepository implements IResumeRepository {
           const projectEntity = new ProjectEntity();
           // Only set ID if it's provided (for existing records)
           if (project.id) {
-            projectEntity.id = project.id;
+            projectEntity.id = project.id.toString();
           }
-          projectEntity.resumeId = resume.getId();
+          projectEntity.resumeId = resume.getId().toString();
           projectEntity.name = project.name;
-          projectEntity.description = project.description;
-          projectEntity.url = project.url;
+          projectEntity.description = project.description || '';
+          projectEntity.url = project.url || '';
 
           await transactionalEntityManager.save(projectEntity);
 
@@ -334,9 +334,9 @@ export class TypeORMResumeRepository implements IResumeRepository {
           const entity = new LanguageEntity();
           // Only set ID if it's provided (for existing records)
           if (lang.id) {
-            entity.id = lang.id;
+            entity.id = lang.id.toString();
           }
-          entity.resumeId = resume.getId();
+          entity.resumeId = resume.getId().toString();
           entity.name = lang.name;
           entity.proficiency = lang.proficiency;
           return entity;
@@ -396,14 +396,14 @@ export class TypeORMResumeRepository implements IResumeRepository {
       experience,
       skills,
       projects: entity.projects?.map(project => ({
-        id: project.id,
+        id: parseInt(project.id),
         name: project.name,
         description: project.description,
         url: project.url,
         technologies: project.technologies?.map(tech => tech.technology) || []
       })),
       languages: entity.languages?.map(lang => ({
-        id: lang.id,
+        id: parseInt(lang.id),
         name: lang.name,
         proficiency: lang.proficiency
       })),
